@@ -1,0 +1,269 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens. Colour and font values are injected from site.config.ts
+ * (see app/layout.tsx) as --brand-* variables; nothing here is brand-specific.
+ */
+@theme inline {
+  --color-paper: var(--brand-paper);
+  --color-paper-deep: var(--brand-paper-deep);
+  --color-ink: var(--brand-ink);
+  --color-ink-soft: var(--brand-ink-soft);
+  --color-accent: var(--brand-accent);
+  --color-accent-light: var(--brand-accent-light);
+  --color-accent-pale: var(--brand-accent-pale);
+  --color-highlight: var(--brand-highlight);
+  --color-tertiary: var(--brand-tertiary);
+  --color-night: var(--brand-night);
+  --color-line: color-mix(in srgb, var(--brand-ink) 16%, transparent);
+
+  --font-display: var(--brand-font-display);
+  --font-sans: var(--brand-font-sans);
+  --font-native: var(--brand-font-native);
+
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root {
+  --gutter: 10px;
+  --section-y: 80px;
+  --gap: 10px;
+  --header-h: 64px;
+  --radius-media: 0.5rem;
+  --radius-card: 1rem;
+
+  --text-body: 16px;
+  --text-label: 14px;
+  --text-lead: 26px;
+  --text-h2: 54px;
+  --text-h3: 26px;
+  --text-hero: 23vw;
+
+  --stack-top: 212px;
+}
+@media (min-width: 480px) {
+  :root {
+    --gutter: 20px;
+    --gap: 16px;
+  }
+}
+@media (min-width: 768px) {
+  :root {
+    --section-y: 100px;
+    --text-lead: 3.7vw;
+    --text-h2: 9vw;
+    --text-h3: 4vw;
+    --text-hero: 21vw;
+    --stack-top: 180px;
+  }
+}
+@media (min-width: 992px) {
+  :root {
+    --gutter: 2rem;
+    --section-y: 10vw;
+    --gap: 1.4vw;
+    --header-h: 76px;
+    --text-body: clamp(1rem, 0.4vw + 0.625rem, 2rem);
+    --text-label: calc(0.4vw + 0.625rem);
+    --text-lead: calc(1.125vw + 1.125rem);
+    --text-h2: 6vw;
+    --text-h3: calc(0.7vw + 1.2rem);
+    --text-hero: 19.5vw;
+    --stack-top: 14vw;
+  }
+}
+
+@layer base {
+  html {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: var(--header-h);
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-accent-light) transparent;
+    /* Phones must never scroll sideways. `clip` (unlike `hidden`) keeps position: sticky working. */
+    overflow-x: clip;
+  }
+  body {
+    font-family: var(--font-sans);
+    font-weight: 450;
+    line-height: 1.4;
+    font-size: var(--text-body);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-paper);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-highlight);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+  }
+  img,
+  video {
+    max-width: 100%;
+    display: block;
+  }
+  button {
+    cursor: pointer;
+  }
+}
+
+/* Layout utilities -------------------------------------------------------- */
+@utility px-gutter {
+  padding-inline: var(--gutter);
+}
+@utility py-section {
+  padding-block: var(--section-y);
+}
+@utility pt-section {
+  padding-top: var(--section-y);
+}
+@utility pb-section {
+  padding-bottom: var(--section-y);
+}
+@utility gap-grid {
+  gap: var(--gap);
+}
+@utility gap-x-grid {
+  column-gap: var(--gap);
+}
+@utility rounded-media {
+  border-radius: var(--radius-media);
+}
+
+/* Type scale -------------------------------------------------------------- */
+@utility label {
+  font-size: var(--text-label);
+  color: var(--color-accent);
+  font-weight: 500;
+  line-height: 1.25;
+}
+@utility text-label {
+  font-size: var(--text-label);
+  font-weight: 500;
+  line-height: 1.25;
+}
+@utility text-h2 {
+  font-size: var(--text-h2);
+  letter-spacing: -0.015em;
+  line-height: 1;
+}
+@utility text-hero {
+  font-size: var(--text-hero);
+  letter-spacing: -0.02em;
+  line-height: 0.9;
+}
+@utility text-lead {
+  font-size: var(--text-lead);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+@utility text-body {
+  font-size: var(--text-body);
+  line-height: 1.4;
+}
+@utility text-h3 {
+  font-size: var(--text-h3);
+  line-height: 1.2;
+}
+
+/* Motion ------------------------------------------------------------------ */
+@keyframes rise-in {
+  0% {
+    opacity: 0;
+    filter: blur(5px);
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+}
+@keyframes word-up {
+  0% {
+    transform: translateY(105%);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes drift {
+  0% {
+    transform: scale(1) translate(0);
+  }
+  to {
+    transform: scale(1.08) translate(-1.5%, -1%);
+  }
+}
+.rise-in {
+  animation: 1s cubic-bezier(0.22, 1, 0.36, 1) both rise-in;
+  animation-delay: var(--d, 0s);
+}
+.word-up {
+  animation: 1.2s cubic-bezier(0.22, 1, 0.36, 1) both word-up;
+  animation-delay: var(--d, 0s);
+}
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  to {
+    opacity: 0.15;
+  }
+}
+.blink {
+  color: var(--color-accent-light);
+  animation: 1s step-end infinite blink;
+}
+.spin-slow {
+  animation: 24s linear infinite spin-slow;
+}
+.drift {
+  animation: drift 24s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  :before,
+  :after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  .blink {
+    animation: none;
+  }
+}
+
+/* Long-form copy (legal pages) */
+.prose-w {
+  max-width: 40rem;
+}
+.prose-w > * + * {
+  margin-top: 1.1em;
+}
+.prose-w p {
+  color: var(--color-ink-soft);
+  font-size: 1.125rem;
+  line-height: 1.65;
+}
